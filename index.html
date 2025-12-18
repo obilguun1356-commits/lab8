@@ -2,7 +2,7 @@
 <html lang="mn">
 <head>
   <meta charset="UTF-8">
-  <title>lab8</title>
+  <title>Hangman</title>
 
   <style>
     body {
@@ -10,23 +10,22 @@
       text-align: center;
       padding: 30px;
 
-      background-image: url("https://images.ctfassets.net/u73tyf0fa8v1/s4z71xfLy7GWskStqj2QF/3ba099c0af4bea384ca9389d363bc477/Ck3-tours-tournaments-introbg.jpg?w=2048&q=75");
+      background-image: url("https://static.vecteezy.com/system/resources/thumbnails/021/216/177/small_2x/abstract-blue-tech-computer-circuit-board-styled-background-with-fast-moving-particle-nodes-and-digital-data-flow-this-modern-technology-motion-background-is-hd-and-a-seamless-loop-video.jpg");
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
 
       color: white;
       text-shadow: 2px 2px 5px black;
     }
 
     #Hariult {
-      font-size: 35px;
+      font-size: 30px;
       letter-spacing: 10px;
       margin: 20px;
     }
 
     #Useg button {
-      margin: 5px;
+      margin: 4px;
       padding: 10px;
       width: 40px;
       font-size: 16px;
@@ -55,27 +54,33 @@
 
   <button id="startBtn"
           style="padding: 10px 20px; font-size: 18px; cursor:pointer; margin-bottom: 15px;">
-          Эхлэх
+          Ehley
   </button>
 
   <h2 id="Asuult"></h2>
-
   <div id="Hariult"></div>
 
   <canvas id="hangman" width="300" height="300"></canvas>
-
   <div id="Useg"></div>
 
 
 <script>
+  // Асуулт + хариулт (КИРИЛЛ)
   var questions = [
     'Үнэгний зулзага?',
     'Монголын хамгийн гүн нуур?',
-    'Дэлхийн хамгийн том мөрөн?',
+    'Дэлхийн хамгийн урт мөрөн?',
     'Монголын №1 сургууль?'
   ];
-  var answers = ['ГАВАР', 'ХӨВСГӨЛ', 'НИЛ', 'МУИС'];
 
+  var answers = [
+    'ГАВАР',
+    'ХӨВСГӨЛ',
+    'НИЛ',
+    'МУИС'
+  ];
+
+  // State
   var chosenAnswer = "";
   var display = [];
   var wrong = 0;
@@ -111,7 +116,7 @@
       case 2: ctx.moveTo(60,280); ctx.lineTo(60,40); ctx.stroke(); break;
       case 3: ctx.moveTo(60,40); ctx.lineTo(200,40); ctx.stroke(); break;
       case 4: ctx.moveTo(200,40); ctx.lineTo(200,80); ctx.stroke(); break;
-      case 5: ctx.beginPath(); ctx.arc(200,110,30,0,Math.PI*2); ctx.stroke(); break;
+      case 5: ctx.arc(200,110,30,0,Math.PI*2); ctx.stroke(); break;
       case 6: ctx.moveTo(200,140); ctx.lineTo(200,220); ctx.stroke(); break;
       case 7: ctx.moveTo(200,160); ctx.lineTo(160,190); ctx.stroke(); break;
       case 8: ctx.moveTo(200,160); ctx.lineTo(240,190); ctx.stroke(); break;
@@ -135,59 +140,66 @@
     if (currentIndex >= order.length) {
       qBox.textContent = "";
       aBox.textContent = "";
-      alert("Бүх асуултыг амжилттай дуусгалаа! 🎉");
+      alert("Wow bugdiig ni duusgachihlaa 1 od uguy! 🎉");
       return;
     }
 
     const idx = order[currentIndex];
     qBox.textContent = questions[idx];
-    chosenAnswer = answers[idx].toUpperCase();
+    chosenAnswer = answers[idx];
 
     display = chosenAnswer.split("").map(c => c === " " ? " " : "_");
     aBox.textContent = display.join(" ");
-    const mongolLetters = ['А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','Ө','П','Р','С','Т','У','Ү','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'];
 
-    mongolLetters.forEach(letter => {
+    let mongolLetters = [
+      "А","Б","В","Г","Д",
+      "Е","Ё","Ж","З","И",
+      "Й","К","Л","М","Н",
+      "О","Ө","П","Р","С",
+      "Т","У","Ү","Ф","Х",
+      "Ц","Ч","Ш","Щ","Ъ",
+      "Ы","Ь","Э","Ю","Я"
+    ];
+
+    for (let letter of mongolLetters) {
       let btn = document.createElement("button");
       btn.textContent = letter;
-      btn.onclick = () => guess(btn.textContent, btn);
+      btn.onclick = () => guess(letter, btn);
       lettersBox.appendChild(btn);
-    });
+    }
   }
+
   function guess(letter, btn) {
 
+    btn.disabled = true;
     let found = false;
 
     for (let i = 0; i < chosenAnswer.length; i++) {
       if (display[i] === "_" && chosenAnswer[i] === letter) {
         display[i] = letter;
         found = true;
-        break;
+        break; 
       }
     }
 
     aBox.textContent = display.join(" ");
-    btn.disabled = true;
 
     if (found) {
-
       if (!display.includes("_")) {
         setTimeout(() => {
-          alert("Ялагч 🎉 !");
+          alert("Wow Congrats! 🎉");
           currentIndex++;
           loadQuestion();
         }, 200);
       }
-
-    } else {
+    } 
+    else {
       wrong++;
       draw(wrong);
 
       if (wrong === 10) {
         setTimeout(() => {
-          alert("Ялагдагч 💀! Зөв хариулт: " + chosenAnswer);
-          currentIndex++;
-          loadQuestion();
+          alert("Loser! Hariult: " + chosenAnswer);
         }, 200);
       }
     }
