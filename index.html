@@ -2,7 +2,7 @@
 <html lang="mn">
 <head>
   <meta charset="UTF-8">
-  <title>Hangman</title>
+  <title>lab8</title>
 
   <style>
     body {
@@ -55,7 +55,7 @@
 
   <button id="startBtn"
           style="padding: 10px 20px; font-size: 18px; cursor:pointer; margin-bottom: 15px;">
-          Ehleh
+          Эхлэх
   </button>
 
   <h2 id="Asuult"></h2>
@@ -68,21 +68,18 @@
 
 
 <script>
-  // Асуулт + хариулт
   var questions = [
-    'Unegnii zulzaga?',
-    'Mongoliin hamgiin gun nuur?',
-    'Delhiin hamgiin tom murun?',
-    'Mongoliin №1 surguuli?'
+    'Үнэгний зулзага?',
+    'Монголын хамгийн гүн нуур?',
+    'Дэлхийн хамгийн том мөрөн?',
+    'Монголын №1 сургууль?'
   ];
-  var answers = ['Gavar', 'Huvsgul', 'Nile', 'NUM'];
+  var answers = ['ГАВАР', 'ХӨВСГӨЛ', 'НИЛ', 'МУИС'];
 
-  // Тоглоомын state
   var chosenAnswer = "";
   var display = [];
   var wrong = 0;
 
-  // Рандом дараалал
   var order = [];
   var currentIndex = 0;
 
@@ -92,7 +89,6 @@
   const canvas = document.getElementById("hangman");
   const ctx = canvas.getContext("2d");
 
-  // Fisher–Yates shuffle
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -124,7 +120,6 @@
     }
   }
 
-  // Game start → random order
   function startGame() {
     order = Array.from(Array(questions.length).keys());
     shuffleArray(order);
@@ -140,7 +135,7 @@
     if (currentIndex >= order.length) {
       qBox.textContent = "";
       aBox.textContent = "";
-      alert("Wow bugdiig ni duusgachihdag gaihaltai humun yumaa! 🎉");
+      alert("Бүх асуултыг амжилттай дуусгалаа! 🎉");
       return;
     }
 
@@ -150,22 +145,19 @@
 
     display = chosenAnswer.split("").map(c => c === " " ? " " : "_");
     aBox.textContent = display.join(" ");
+    const mongolLetters = ['А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','Ө','П','Р','С','Т','У','Ү','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'];
 
-    // үсэг товчлуурууд
-    for (let i = 65; i <= 90; i++) {
+    mongolLetters.forEach(letter => {
       let btn = document.createElement("button");
-      btn.textContent = String.fromCharCode(i);
+      btn.textContent = letter;
       btn.onclick = () => guess(btn.textContent, btn);
       lettersBox.appendChild(btn);
-    }
+    });
   }
-
-  // Зөвхөн нэг ширхэг үсгийг ил гаргана
   function guess(letter, btn) {
 
     let found = false;
 
-    // зөвхөн эхний "_" дээр таарах үсгийг ил гаргах
     for (let i = 0; i < chosenAnswer.length; i++) {
       if (display[i] === "_" && chosenAnswer[i] === letter) {
         display[i] = letter;
@@ -175,12 +167,13 @@
     }
 
     aBox.textContent = display.join(" ");
+    btn.disabled = true;
 
     if (found) {
 
       if (!display.includes("_")) {
         setTimeout(() => {
-          alert("Winner🎉 !");
+          alert("Ялагч 🎉 !");
           currentIndex++;
           loadQuestion();
         }, 200);
@@ -192,7 +185,9 @@
 
       if (wrong === 10) {
         setTimeout(() => {
-          alert("Loser💀! Zuv hariult: " + chosenAnswer);
+          alert("Ялагдагч 💀! Зөв хариулт: " + chosenAnswer);
+          currentIndex++;
+          loadQuestion();
         }, 200);
       }
     }
