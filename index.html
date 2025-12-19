@@ -168,37 +168,35 @@
   }
 
  function guess(letter, btn) {
-    btn.disabled = true;
-    let found = false;
-    for (let i = 0; i < chosenAnswer.length; i++) {
-        if (display[i] === "_" && chosenAnswer[i] === letter) {
-            display[i] = letter;
-            found = true;
-            break; 
-        }
+  btn.disabled = true;
+  let found = false;
+
+  if (chosenAnswer[nextLetterIndex] === letter) {
+    display[nextLetterIndex] = letter;
+    found = true;
+    nextLetterIndex++; 
+  }
+
+  aBox.textContent = display.join(" ");
+
+  if (!found) {
+    wrong++;
+    draw(wrong);
+
+    if (wrong === 10) {
+      setTimeout(() => {
+        alert("Та ялагдлаа! Хариулт: " + chosenAnswer);
+      }, 200);
     }
-
-    aBox.textContent = display.join(" ");
-
-    if (found) {
-        if (!display.includes("_")) {
-            setTimeout(() => {
-                alert("Wow Congrats! 🎉");
-                currentIndex++;
-                loadQuestion();
-            }, 200);
-        }
-    } else {
-        wrong++;
-        draw(wrong);
-
-        if (wrong === 10) {
-            setTimeout(() => {
-                alert("Loser! Hariult: " + chosenAnswer);
-            }, 200);
-        }
-    }
+  } else if (!display.includes("_")) {
+    setTimeout(() => {
+      alert("Зөв таалаа! 🎉");
+      currentIndex++;
+      loadQuestion();
+    }, 200);
+  }
 }
+
 
   document.getElementById("startBtn").onclick = startGame;
 </script>
