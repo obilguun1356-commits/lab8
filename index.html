@@ -14,43 +14,58 @@ body {
   color:white;
   text-shadow:2px 2px 5px black;
 }
-.container { max-width:600px; margin:0 auto; background:rgba(0,0,0,0.5); padding:20px; border-radius:10px;}
-#Hariult { font-size:30px; letter-spacing:10px; margin:20px 0;}
-#Useg button { margin:4px; padding:8px; width:35px; font-size:14px; border-radius:5px; border:none; background:rgba(255,255,255,0.8); cursor:pointer;}
-#Useg button:disabled { background:rgba(0,0,0,0.4); color:white; }
-canvas { border:1px solid white; background: rgba(0,0,0,0.6); margin-top:20px;}
+.container {
+  max-width:600px;
+  margin:0 auto;
+  background:rgba(0,0,0,0.5);
+  padding:20px;
+  border-radius:10px;
+}
+#Hariult {
+  font-size:30px;
+  letter-spacing:10px;
+  margin:20px 0;
+}
+#Useg button {
+  margin:4px;
+  padding:8px;
+  width:35px;
+  font-size:14px;
+  border-radius:5px;
+  border:none;
+  background:rgba(255,255,255,0.8);
+  cursor:pointer;
+}
+canvas {
+  border:1px solid white;
+  background: rgba(0,0,0,0.6);
+  margin-top:20px;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <header>
-    <h1>Hangman тоглоом</h1>
-    <button id="startBtn">Эхлэх</button>
-  </header>
+  <h1>Hangman тоглоом</h1>
+  <button id="startBtn">Ehleh</button>
 
-  <section>
-    <h2 id="Asuult"></h2>
-  </section>
+  <h2 id="Asuult"></h2>
+  <div id="Hariult"></div>
 
-  <section>
-    <div id="Hariult"></div>
-  </section>
-
-  <section>
-    <canvas id="hangman" width="300" height="300"></canvas>
-  </section>
-
-  <section>
-    <div id="Useg"></div>
-  </section>
+  <canvas id="hangman" width="300" height="300"></canvas>
+  <div id="Useg"></div>
 </div>
 
 <script>
-var questions = ['Үнэгний зулзага?','Монголын хамгийн гүн нуур?','Дэлхийн хамгийн урт мөрөн?','Монголын №1 сургууль?'];
-var answers = ['ГАВАР','ХӨВСГӨЛ','НИЛ','МУИС'];
+const questions = [
+  'Үнэгний зулзага?',
+  'Монголын хамгийн гүн нуур?',
+  'Дэлхийн хамгийн урт мөрөн?',
+  'Монголын №1 сургууль?'
+];
+const answers = ['ГАВАР','ХӨВСГӨЛ','НИЛ','МУИС'];
 
-var chosenAnswer="", display=[], wrong=0, currentIndex=0, nextLetterIndex=0;
+let chosenAnswer="", display=[], wrong=0, currentIndex=0, nextLetterIndex=0;
 
 const qBox=document.getElementById("Asuult");
 const aBox=document.getElementById("Hariult");
@@ -58,22 +73,27 @@ const lettersBox=document.getElementById("Useg");
 const canvas=document.getElementById("hangman");
 const ctx=canvas.getContext("2d");
 
-function clearCanvasAndPath(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.beginPath(); }
+function clearCanvas(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
 
 function draw(step){
-  ctx.strokeStyle="white"; ctx.lineWidth=3; ctx.beginPath();
+  ctx.strokeStyle="white";
+  ctx.lineWidth=3;
+  ctx.beginPath();
   switch(step){
-    case 1: ctx.moveTo(10,280); ctx.lineTo(290,280); ctx.stroke(); break;
-    case 2: ctx.moveTo(60,280); ctx.lineTo(60,40); ctx.stroke(); break;
-    case 3: ctx.moveTo(60,40); ctx.lineTo(200,40); ctx.stroke(); break;
-    case 4: ctx.moveTo(200,40); ctx.lineTo(200,80); ctx.stroke(); break;
-    case 5: ctx.arc(200,110,30,0,Math.PI*2); ctx.stroke(); break;
-    case 6: ctx.moveTo(200,140); ctx.lineTo(200,220); ctx.stroke(); break;
-    case 7: ctx.moveTo(200,160); ctx.lineTo(160,190); ctx.stroke(); break;
-    case 8: ctx.moveTo(200,160); ctx.lineTo(240,190); ctx.stroke(); break;
-    case 9: ctx.moveTo(200,220); ctx.lineTo(170,260); ctx.stroke(); break;
-    case 10: ctx.moveTo(200,220); ctx.lineTo(230,260); ctx.stroke(); break;
+    case 1: ctx.moveTo(10,280); ctx.lineTo(290,280); break;
+    case 2: ctx.moveTo(60,280); ctx.lineTo(60,40); break;
+    case 3: ctx.moveTo(60,40); ctx.lineTo(200,40); break;
+    case 4: ctx.moveTo(200,40); ctx.lineTo(200,80); break;
+    case 5: ctx.arc(200,110,30,0,Math.PI*2); break;
+    case 6: ctx.moveTo(200,140); ctx.lineTo(200,220); break;
+    case 7: ctx.moveTo(200,160); ctx.lineTo(160,190); break;
+    case 8: ctx.moveTo(200,160); ctx.lineTo(240,190); break;
+    case 9: ctx.moveTo(200,220); ctx.lineTo(170,260); break;
+    case 10: ctx.moveTo(200,220); ctx.lineTo(230,260); break;
   }
+  ctx.stroke();
 }
 
 function startGame(){
@@ -82,45 +102,61 @@ function startGame(){
 }
 
 function loadQuestion(){
-  clearCanvasAndPath();
+  clearCanvas();
   lettersBox.innerHTML="";
   wrong=0;
   nextLetterIndex=0;
 
   if(currentIndex>=questions.length){
-    qBox.textContent=""; aBox.textContent="";
-    alert("Бүх асуултыг дуусгалаа! 🎉");
+    alert("Bugdiig ni taachihlaa🎉!");
     return;
   }
 
   chosenAnswer=answers[currentIndex];
-  display=chosenAnswer.split("").map(c=>c===" "? " ":"_");
+  display=chosenAnswer.split("").map(c=>"_");
   aBox.textContent=display.join(" ");
   qBox.textContent=questions[currentIndex];
 
-  let mongolLetters=["А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н","О","Ө","П","Р","С","Т","У","Ү","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"];
+  const mongolLetters=[
+    "А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н",
+    "О","Ө","П","Р","С","Т","У","Ү","Ф","Х","Ц","Ч","Ш","Щ",
+    "Ъ","Ы","Ь","Э","Ю","Я"
+  ];
 
   mongolLetters.forEach(letter=>{
-    let btn=document.createElement("button");
+    const btn=document.createElement("button");
     btn.textContent=letter;
-    btn.onclick=()=> guess(letter,btn);
+    btn.onclick=()=>guess(letter);
     lettersBox.appendChild(btn);
   });
 }
 
-function guess(letter,btn){
-  if(chosenAnswer[nextLetterIndex]===letter){
+function guess(letter){
+  if(letter === chosenAnswer[nextLetterIndex]){
     display[nextLetterIndex]=letter;
     nextLetterIndex++;
     aBox.textContent=display.join(" ");
-    if(!display.includes("_")){
-      setTimeout(()=>{ alert("Зөв таалаа! 🎉"); currentIndex++; loadQuestion(); },200);
+
+    if(nextLetterIndex === chosenAnswer.length){
+      setTimeout(()=>{
+        alert("Wow Congrats🎉!");
+        currentIndex++;
+        loadQuestion();
+      },200);
     }
-  } else {
+  }
+  else if(chosenAnswer.includes(letter)){
+    return;
+  }
+  else {
     wrong++;
     draw(wrong);
     if(wrong>=10){
-      setTimeout(()=>{ alert("Та ялагдлаа! Хариулт: "+chosenAnswer); currentIndex++; loadQuestion(); },200);
+      setTimeout(()=>{
+        alert("LOSER! Hariult: "+chosenAnswer);
+        currentIndex++;
+        loadQuestion();
+      },200);
     }
   }
 }
