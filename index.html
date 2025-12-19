@@ -137,7 +137,7 @@ function guess(letter, btn){
       aBox.textContent=display.join(" ");
       if(chosenAnswer.length===1){
         setTimeout(()=>{
-          alert("Wow Congrats🎉!");
+          alert("Congrats🎉!");
           currentIndex++;
           loadQuestion();
         },200);
@@ -162,7 +162,7 @@ function guess(letter, btn){
       aBox.textContent=display.join(" ");
       if(!display.includes("_")){
         setTimeout(()=>{
-          alert("🎉 Зөв таалаа!");
+          alert("Congrats🎉!");
           currentIndex++;
           loadQuestion();
         },200);
@@ -172,7 +172,7 @@ function guess(letter, btn){
       draw(wrong);
       if(wrong>=10){
         setTimeout(()=>{
-          alert("😢 Та ялагдлаа! Хариулт: "+chosenAnswer);
+          alert("LOSER😢! Hariult: "+chosenAnswer);
           currentIndex++;
           loadQuestion();
         },200);
