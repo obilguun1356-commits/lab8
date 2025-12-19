@@ -109,8 +109,6 @@ function loadQuestion(){
 }
 
 function guess(letter,btn){
-  btn.disabled=true;
-  // зөвхөн дараагийн үсгийг шалгах
   if(chosenAnswer[nextLetterIndex]===letter){
     display[nextLetterIndex]=letter;
     nextLetterIndex++;
