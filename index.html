@@ -36,11 +36,8 @@ body {
   background:rgba(255,255,255,0.8);
   cursor:pointer;
 }
-canvas {
-  border:1px solid white;
-  background: rgba(0,0,0,0.6);
-  margin-top:20px;
-}
+#Useg button:disabled { background:rgba(0,0,0,0.4); color:white; }
+canvas { border:1px solid white; background: rgba(0,0,0,0.6); margin-top:20px;}
 </style>
 </head>
 <body>
@@ -108,7 +105,7 @@ function loadQuestion(){
   nextLetterIndex=0;
 
   if(currentIndex>=questions.length){
-    alert("Bugdiig ni taachihlaa🎉!");
+    alert("WOW 1 od uguy! 🎉");
     return;
   }
 
@@ -126,37 +123,60 @@ function loadQuestion(){
   mongolLetters.forEach(letter=>{
     const btn=document.createElement("button");
     btn.textContent=letter;
-    btn.onclick=()=>guess(letter);
+    btn.onclick=()=> guess(letter, btn);
     lettersBox.appendChild(btn);
   });
 }
 
-function guess(letter){
-  if(letter === chosenAnswer[nextLetterIndex]){
-    display[nextLetterIndex]=letter;
-    nextLetterIndex++;
-    aBox.textContent=display.join(" ");
+function guess(letter, btn){
 
-    if(nextLetterIndex === chosenAnswer.length){
-      setTimeout(()=>{
-        alert("Wow Congrats🎉!");
-        currentIndex++;
-        loadQuestion();
-      },200);
+  if(nextLetterIndex===0){
+    if(letter===chosenAnswer[0]){
+      display[nextLetterIndex]=letter;
+      nextLetterIndex++;
+      aBox.textContent=display.join(" ");
+      if(chosenAnswer.length===1){
+        setTimeout(()=>{
+          alert("Wow Congrats🎉!");
+          currentIndex++;
+          loadQuestion();
+        },200);
+      }
+    } else {
+      wrong++;
+      draw(wrong);
+      if(wrong>=10){
+        setTimeout(()=>{
+          alert("LOSER😢! Hariult: "+chosenAnswer);
+          currentIndex++;
+          loadQuestion();
+        },200);
+      }
     }
   }
-  else if(chosenAnswer.includes(letter)){
-    return;
-  }
+
   else {
-    wrong++;
-    draw(wrong);
-    if(wrong>=10){
-      setTimeout(()=>{
-        alert("LOSER! Hariult: "+chosenAnswer);
-        currentIndex++;
-        loadQuestion();
-      },200);
+    if(letter===chosenAnswer[nextLetterIndex]){
+      display[nextLetterIndex]=letter;
+      nextLetterIndex++;
+      aBox.textContent=display.join(" ");
+      if(!display.includes("_")){
+        setTimeout(()=>{
+          alert("🎉 Зөв таалаа!");
+          currentIndex++;
+          loadQuestion();
+        },200);
+      }
+    } else {
+      wrong++;
+      draw(wrong);
+      if(wrong>=10){
+        setTimeout(()=>{
+          alert("😢 Та ялагдлаа! Хариулт: "+chosenAnswer);
+          currentIndex++;
+          loadQuestion();
+        },200);
+      }
     }
   }
 }
