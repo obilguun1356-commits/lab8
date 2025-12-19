@@ -167,40 +167,38 @@
     }
   }
 
-  function guess(letter, btn) {
-
+ function guess(letter, btn) {
+    btn.disabled = true;
     let found = false;
-
     for (let i = 0; i < chosenAnswer.length; i++) {
-      if (display[i] === "_" && chosenAnswer[i] === letter) {
-        display[i] = letter;
-        found = true;
-        break; 
-      }
+        if (display[i] === "_" && chosenAnswer[i] === letter) {
+            display[i] = letter;
+            found = true;
+            break; 
+        }
     }
 
     aBox.textContent = display.join(" ");
 
     if (found) {
-      if (!display.includes("_")) {
-        setTimeout(() => {
-          alert("Wow Congrats! 🎉");
-          currentIndex++;
-          loadQuestion();
-        }, 200);
-      }
-    } 
-    else {
-      wrong++;
-      draw(wrong);
+        if (!display.includes("_")) {
+            setTimeout(() => {
+                alert("Wow Congrats! 🎉");
+                currentIndex++;
+                loadQuestion();
+            }, 200);
+        }
+    } else {
+        wrong++;
+        draw(wrong);
 
-      if (wrong === 10) {
-        setTimeout(() => {
-          alert("Loser! Hariult: " + chosenAnswer);
-        }, 200);
-      }
+        if (wrong === 10) {
+            setTimeout(() => {
+                alert("Loser! Hariult: " + chosenAnswer);
+            }, 200);
+        }
     }
-  }
+}
 
   document.getElementById("startBtn").onclick = startGame;
 </script>
